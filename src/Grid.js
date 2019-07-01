@@ -82,6 +82,7 @@ class Grid extends React.Component {
         this.handleScroll2 = this.handleScroll2.bind(this);
         let colWidths = [];
         let frozenColumns = this.props.frozenColumns;
+        let data = this.props.data;
         const columns = this.props.columns.filter((col, idx)=>{
             let include = true;
             for (let i = 0; i < frozenColumns.length; i++) {
@@ -92,9 +93,20 @@ class Grid extends React.Component {
             }
             return include;
         });
-        for (let i = 0; i < columns.length; i++) {
-            colWidths.push(0);
+        let minLengthCols = [];
+        for (let i = 0; i < this.props.columns.length; i++) {
+            colWidths.push([0,0]);
+            minLengthCols.push(this.props.columns[i]);
         }
+        for (let i = 0; i < data.length; i++){
+            for (let j = 0; j < data[i].length; j++) {
+                if (minLengthCols[j].length < data[i][j].length) {
+                    minLengthCols[j] = data[i][j];
+                    colWidths[j] = [i,j];
+                } 
+            }
+        }
+
         this.state = {
             colWidths: colWidths
         };
@@ -110,8 +122,27 @@ class Grid extends React.Component {
     }
 
     componentDidMount(){
-        //let headerTable = this.refs.scrollHeader.firstChild;
-        //let dataTable = this.refs.scroller.firstChild;
+        if (this.refs.scrollHeader && this.refs.scroller) {
+            let headerTable = this.refs.scrollHeader.firstChild;
+            let dataTable = this.refs.scroller.firstChild;
+            let colWidths = [];
+            for (let i = 0; i < this.state.colWidths.length; i++) {
+                colWidths.push(dataTable.rows[this.state.colWidths[i][0]].cells[this.state.colWidths[i][1]].offsetWidth)
+            }
+            let headerCells = headerTable.rows[0].cells;
+            let dataCells = dataTable.rows.length > 0 ? dataTable.rows[0].cells : [];
+            let totalWidth = 0;
+            for (let i = 0; i < colWidths.length; i++) {
+                headerCells[i].style.width = colWidths[i] + 'px';
+                if (dataCells[i]) {
+                    dataCells[i].style.width = colWidths[i] + 'px';
+                }
+                totalWidth += colWidths[i];
+            }
+            dataTable.style.width = totalWidth + 'px';
+            
+            headerTable.style.width = dataTable.offsetWidth + 'px';
+        }
     }
 
     render() {

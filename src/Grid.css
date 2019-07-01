@@ -1,16 +1,19 @@
-#scrollable_grid{
-    width: 1000px;
-    margin: auto;
+* {
+    box-sizing: border-box;
+}
+#scrollable_grid{    
+    margin: 10px;
 }
 
 #scrollable_grid_header{
-    width: 982px;
+    
+    margin-right: 19px;
     overflow: hidden;
 }
 
 #scrollable_grid_header table,
 #scrollable_grid_data table {
-    width: 5000px;
+    white-space: nowrap;
     border: solid 1px black;
     border-bottom: none;
     border-collapse: collapse;
@@ -18,13 +21,13 @@
 
 #scrollable_grid_header table thead th,
 #scrollable_grid_data table tbody td {
-    width: 200px;
+    
     text-align: left;
     border: solid 1px black;
     padding: 2px 5px;
 }
 #scrollable_grid_header table thead th {
-    border-bottom: none;
+    background-color: skyblue;
 }
 
 #scrollable_grid_data table tbody tr:nth-child(2n) {
@@ -32,7 +35,6 @@
 }
 
 #scrollable_grid_data {
-    width: 1000px;
     overflow: scroll;
     height: 600px;
 }
